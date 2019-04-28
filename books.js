@@ -16,7 +16,9 @@ function logError(msg){
 }
 
 function getAllCategoriesfromdb(data){
-    console.log(data);
+    if(data.responseXML){
+        console.log(data.responseXML);
+    }
 }
 
 function parseURL(){

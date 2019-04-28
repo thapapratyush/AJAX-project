@@ -11,8 +11,9 @@ function printXMLorJSON($printArray, $parameter){
     if(strcasecmp($parameter, "json") == 0){
         echo json_encode($printArray);
     }else{
-        $xml = new SimpleXMLElement("<div/>");
+        $xml = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><categories></categories>");
         array_walk_recursive($printArray, array($xml, 'addChild'));
+        header('Content-Type: application/xml; charset=utf-8');
         echo $xml->asXML();
     }
 }
