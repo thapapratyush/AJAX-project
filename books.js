@@ -1,7 +1,7 @@
 window.onload = startInitialRequest();
 
 function startInitialRequest(){
-    var request = new Ajax.Request("booklist.php",{
+    new Ajax.Request("booklist.php",{
         method: "GET",
         parameters: {},
         onSuccess: getAllCategoriesfromdb,
