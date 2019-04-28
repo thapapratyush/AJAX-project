@@ -20,16 +20,11 @@ function printXMLorJSON($printArray, $parameter){
 
 function querydbforBooksfromCategories($chosenCategory){
     foreach($chosenCategory as $category){
-        $query = "select t.title_name, a.author, y.year, c.category from title t ";
-        $query .= "join category c on c.category_id = t.category_id and ";
-        $query .= "c.category_id=" . $category . " ";
-        $query .= "join year y on y.title_id = t.title_id ";
-        $query .= "join author a on a.author_id = t.author_id;";
-
-        echo $query;
+        $query = "SELECT title.title_name, category, year.year, author.author from title, category, year, author where title.title_id = year.title_id and title.author_id and author.author_id = title.author_id and category.category = \"". $category." \" and category.category_id = title.category_id;";
+        $dbase = connecttodb();
         $booksofcategory = mysqli_query($dbase, $query);
 
-        // echo json_encode($booksofcategory);
+        echo json_encode($booksofcategory->fetch_all());
     }
         
 }
