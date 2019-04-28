@@ -6,5 +6,6 @@
     </head>
 <body>
     <div id="errorMsg"></div>
+    <div id="container_for_categories"></div>
 </body>
 </html>
