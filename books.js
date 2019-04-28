@@ -8,10 +8,11 @@ function startInitialRequest(){
         onSuccess: getAllCategoriesfromdb,
         onFailure: logError
     });
+    console.log(document.getElementById('errorMsg'));
 }
 
 function logError(msg){
-    console.log(msg);
+    console.log(document.getElementById('errorMsg'));
 }
 
 function getAllCategoriesfromdb(data){

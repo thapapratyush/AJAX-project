@@ -5,5 +5,6 @@
     <script type="text/javascript" src="books.js" ></script>
     </head>
 <body>
+    <div id="errorMsg"></div>
 </body>
 </html>
