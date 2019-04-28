@@ -6,6 +6,6 @@
     </head>
 <body>
     <div id="errorMsg"></div>
-    <form id="container_for_categories" onsubmit="fetchBooksfromCategories()"></form>
+    <div id="container_for_categories"></div>
 </body>
 </html>

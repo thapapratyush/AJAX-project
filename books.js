@@ -32,18 +32,21 @@ function getAllCategoriesfromdb(data){
                 container.appendChild(label);
             }    
         }
-        var submitBtn = document.createElement("input");
-        submitBtn.type = "submit";
-        submitBtn.value = "List Books";
+        var submitBtn = document.createElement("button");
+        submitBtn.innerHTML = "List Books";
+        submitBtn.addEventListener("click", fetchBooksfromCategories);
         container.appendChild(submitBtn);
     }
 }
 
 function fetchBooksfromCategories(){
     var categoriestoGet = [];
-    $("input:checkbox[name=category_name]:checked").each(function() {
-       categoriestoGet.push($(this).val());
-    });
+    var checkedCategories = document.getElementsByName("category_name");
+    for (var category of checkedCategories){
+        if(category.checked){
+            categoriestoGet.push(category.value);
+        }
+    }
     console.log(categoriestoGet);
 }
 
