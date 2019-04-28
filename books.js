@@ -1,10 +1,10 @@
 window.onload = startInitialRequest();
 
 function startInitialRequest(){
-    console.log(parseURL());
+    var format = parseURL();
     new Ajax.Request("booklist.php",{
         method: "GET",
-        parameters: {},
+        parameters: {format: format},
         onSuccess: getAllCategoriesfromdb,
         onFailure: logError
     });

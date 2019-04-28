@@ -7,21 +7,26 @@ function connecttodb(){
     return $connection;
 }
 
+function printXMLorJSON($printArray, $parameter){
+    if(strcasecmp($parameter, "json") == 0){
+        echo json_encode($printArray);
+    }else{
+        $xml = new SimpleXMLElement("<div/>");
+        array_walk_recursive($printArray, array($xml, 'addChild'));
+        echo $xml->asXML();
+    }
+}
+
 $dbase = connecttodb();
 $parameter = $_GET["format"];
-echo $parameter;
 
 if($dbase != NULL){
     $categories = mysqli_query($dbase, "select * from category");
     $list_of_all_categories = array();
-    // printXMLorJSON($categories->fetch_all());
-}
-
-function printXMLorJSON($printArray){
-    if(strcasecmp($parameter, "json") == 0){
-        echo json_encode($printArray);
-    }else{
-        echo $printArray;
+    $finfo = $categories->fetch_all(MYSQLI_ASSOC);
+    foreach ($finfo as $val){
+        array_push($list_of_all_categories, $val[category]);
     }
+    printXMLorJSON($list_of_all_categories, $parameter);
 }
 ?>
