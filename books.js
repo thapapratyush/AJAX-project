@@ -1,14 +1,18 @@
-window.onload = startInitialRequest(err);
+window.onload = startInitialRequest();
 
-function startInitialRequest(err){
+function startInitialRequest(){
     var request = new Ajax.request("booklist.php",{
         method: "GET",
         parameters: {},
         onSuccess: getAllCategoriesfromdb,
-        onFailure: logError(err)
+        onFailure: logError
     });
 }
 
 function logError(msg){
     console.log(msg);
+}
+
+function getAllCategoriesfromdb(data){
+    console.log(data);
 }
