@@ -4,7 +4,7 @@ function startInitialRequest(){
     var format = parseURL();
     new Ajax.Request("booklist.php",{
         method: "GET",
-        parameters: {format: format},
+        parameters: {format: format,selectedCategory:"false",},
         onSuccess: getAllCategoriesfromdb,
         onFailure: logError
     });
@@ -12,7 +12,7 @@ function startInitialRequest(){
 }
 
 function logError(msg){
-    console.log(document.getElementById('errorMsg'));
+    console.log(msg);
 }
 
 function getAllCategoriesfromdb(data){
@@ -47,10 +47,25 @@ function fetchBooksfromCategories(){
             categoriestoGet.push(category.value);
         }
     }
-    console.log(categoriestoGet);
+    if (categoriestoGet != null){
+        getBooksfromCategory(categoriestoGet);
+    }
+}
+
+function getBooksfromCategory(selectedCategory){
+    new Ajax.Request("booklist.php",{
+            method:"GET",
+            parameters:{
+                format:parseURL(),
+                selectedCategory:selectedCategory.toString(),
+            },
+            onSuccess:logError,
+
+        });
 }
 
 function parseURL(){
     var format = location.search.substr(1);
-    return decodeURIComponent(format.split("=").pop());
+    console.log(decodeURIComponent(format.split("format=").pop()));
+    return decodeURIComponent(format.split("format=").pop());
 }

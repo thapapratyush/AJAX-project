@@ -20,14 +20,20 @@ function printXMLorJSON($printArray, $parameter){
 
 $dbase = connecttodb();
 $parameter = $_GET["format"];
+$selectedCategory = $_GET["selectedCategory"];
+
 
 if($dbase != NULL){
-    $categories = mysqli_query($dbase, "select * from category");
-    $list_of_all_categories = array();
-    $finfo = $categories->fetch_all(MYSQLI_ASSOC);
-    foreach ($finfo as $val){
-        array_push($list_of_all_categories, $val[category]);
+    if($selectedCategory=="false") {
+        $categories = mysqli_query($dbase, "select * from category");
+        $list_of_all_categories = array();
+        $finfo = $categories->fetch_all(MYSQLI_ASSOC);
+        foreach ($finfo as $val){
+            array_push($list_of_all_categories, $val[category]);
+        }
+        printXMLorJSON($list_of_all_categories, $parameter);
+    }else{
+        echo $selectedCategory;
     }
-    printXMLorJSON($list_of_all_categories, $parameter);
 }
 ?>
