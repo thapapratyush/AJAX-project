@@ -17,10 +17,9 @@ function logError(msg){
 
 function getAllCategoriesfromdb(data){
     var list_of_categories = []
-    // if(isJSON(data.responseText)){
-    //     list_of_categories = JSON.parse(data.responseText);
-    // }else 
-    if(data.responseXML){
+    if(isJSON(data.responseText)){
+        list_of_categories = JSON.parse(data.responseText);
+    }else if(data.responseXML){
         list_of_categories = data.responseXML.firstChild.childNodes; //The responseXML returns a document of which categories is the first element. All it's child nodes are the list of categories
     }
     addCategoriestoUI(list_of_categories);

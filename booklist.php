@@ -25,12 +25,12 @@ function querydbforBooksfromCategories($chosenCategory){
         $booksofcategory = mysqli_query($dbase, $query);
         $list_of_book_category = $booksofcategory->fetch_all(MYSQLI_ASSOC);
         
-        if (strcasecmp($format, "json")==0) {
+        if (strcasecmp($_GET["format"], "json")==0) {
 			$list_of_books = array();
 			foreach ($list_of_book_category as $book) {
 				array_push($list_of_books,array($book[author],$book[category],$book[year],$book[title_name]));
 			}
-			array_push($responseJSON, $list_of_books);
+			echo json_encode($list_of_books);
 		} else {
             $xml = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><books></books>");
 			foreach ($list_of_book_category as $book) {
