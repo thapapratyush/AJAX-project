@@ -16,11 +16,19 @@ function logError(msg){
 }
 
 function getAllCategoriesfromdb(data){
-    var container = document.getElementById('container_for_categories');
-    console.log(data);
+    var list_of_categories = []
+    // if(isJSON(data.responseText)){
+    //     list_of_categories = JSON.parse(data.responseText);
+    // }else 
     if(data.responseXML){
-        var list_of_categories = data.responseXML.firstChild.childNodes; //The responseXML returns a document of which categories is the first element. All it's child nodes are the list of categories
-        for(var category of list_of_categories){
+        list_of_categories = data.responseXML.firstChild.childNodes; //The responseXML returns a document of which categories is the first element. All it's child nodes are the list of categories
+    }
+    addCategoriestoUI(list_of_categories);
+}
+
+function addCategoriestoUI(list_of_categories){
+    var container = document.getElementById('container_for_categories');
+    for(var category of list_of_categories){
             var attachRadioBtn = document.createElement("input");
             attachRadioBtn.type = "checkbox";
             attachRadioBtn.value = category.nodeName;
@@ -31,12 +39,11 @@ function getAllCategoriesfromdb(data){
                 container.appendChild(attachRadioBtn);
                 container.appendChild(label);
             }    
-        }
-        var submitBtn = document.createElement("button");
-        submitBtn.innerHTML = "List Books";
-        submitBtn.addEventListener("click", fetchBooksfromCategories);
-        container.appendChild(submitBtn);
     }
+    var submitBtn = document.createElement("button");
+    submitBtn.innerHTML = "List Books";
+    submitBtn.addEventListener("click", fetchBooksfromCategories);
+    container.appendChild(submitBtn);
 }
 
 function fetchBooksfromCategories(){

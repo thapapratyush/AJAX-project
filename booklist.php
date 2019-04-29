@@ -23,8 +23,26 @@ function querydbforBooksfromCategories($chosenCategory){
         $query = "SELECT title.title_name, category, year.year, author.author from title, category, year, author where title.title_id = year.title_id and title.author_id and author.author_id = title.author_id and category.category = \"". $category." \" and category.category_id = title.category_id;";
         $dbase = connecttodb();
         $booksofcategory = mysqli_query($dbase, $query);
-
-        echo json_encode($booksofcategory->fetch_all());
+        $list_of_book_category = $booksofcategory->fetch_all(MYSQLI_ASSOC);
+        
+        if (strcasecmp($format, "json")==0) {
+			$list_of_books = array();
+			foreach ($list_of_book_category as $book) {
+				array_push($list_of_books,array($book[author],$book[category],$book[year],$book[title_name]));
+			}
+			array_push($responseJSON, $list_of_books);
+		} else {
+            $xml = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><books></books>");
+			foreach ($list_of_book_category as $book) {
+				$bookXML = $xml->addChild("book");
+				$bookXML->addChild("author", $book[author]);
+				$bookXML->addChild("name", $book[category]);
+				$bookXML->addChild("year", $book[year]);
+				$bookXML->addChild("title", $book[title_name]);
+			}
+            Header('Content-type: text/xml');	
+		    echo $xml->asXML();
+		}
     }
         
 }
