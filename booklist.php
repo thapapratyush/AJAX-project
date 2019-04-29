@@ -13,7 +13,7 @@ function printXMLorJSON($printArray, $parameter){
     }else{
         $xml = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><categories></categories>");
         array_walk_recursive($printArray, array($xml, 'addChild'));
-        header('Content-Type: application/xml; charset=utf-8');
+        Header('Content-type: application/xml');
         echo $xml->asXML();
     }
 }
@@ -23,18 +23,19 @@ function querydbforBooksfromCategories($chosenCategory){
         $query = "SELECT title.title_name, category, year.year, author.author from title, category, year, author where title.title_id = year.title_id and title.author_id and author.author_id = title.author_id and category.category = \"". $category." \" and category.category_id = title.category_id;";
         $dbase = connecttodb();
         $booksofcategory = mysqli_query($dbase, $query);
-        $xml = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><books></books>");
+        $xmltoSend = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><books></books>");
         $response = array();
         while ($book = $booksofcategory->fetch_assoc()) {
-            $currBook = $xml->addChild("book");
+            $currBook = $xmltoSend->addChild("book");
             $currBook->addChild("author", $book[author]);
             $currBook->addChild("name", $book[category]);
             $currBook->addChild("year", $book[year]);
             $currBook->addChild("title", $book[title_name]);
 		}
-        if (strcasecmp($_GET["format"], "json")!=0){
-            header('Content-Type: application/xml; charset=utf-8');	
-		    echo $xml->asXML();
+    }
+    if (strcasecmp($_GET["format"], "json")!=0){
+            Header('Content-type: application/xml');
+		    echo $xmltoSend->asXML();
         } else {
 			$list_of_books = array();
 			while ($book = $booksofcategory->fetch_assoc()) {
@@ -43,8 +44,6 @@ function querydbforBooksfromCategories($chosenCategory){
 			array_push($response, $list_of_books);
             echo json_encode($response);
         }
-    }
-        
 }
 
 $dbase = connecttodb();

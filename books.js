@@ -17,6 +17,7 @@ function logError(msg){
 
 function getAllCategoriesfromdb(data){
     var list_of_categories = []
+    console.log(data);
     if(data.responseXML){
         list_of_categories = data.responseXML.firstChild.childNodes; //The responseXML returns a document of which categories is the first element. All it's child nodes are the list of categories
     } else {
@@ -66,8 +67,8 @@ function getBooksfromCategory(selectedCategory){
                 format:parseURL(),
                 selectedCategory:selectedCategory.toString(),
             },
-            onSuccess:addBookstoUI,
-
+            onSuccess: logError,
+            onFailure: logError
         });
 }
 
