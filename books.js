@@ -19,6 +19,9 @@ function getAllCategoriesfromdb(data){
     var list_of_categories = []
     if(data.responseXML){
         list_of_categories = data.responseXML.firstChild.childNodes; //The responseXML returns a document of which categories is the first element. All it's child nodes are the list of categories
+    } else {
+        console.log(data);
+        list_of_categories = data.responseText;
     }
     addCategoriestoUI(list_of_categories);
 }

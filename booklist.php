@@ -23,26 +23,26 @@ function querydbforBooksfromCategories($chosenCategory){
         $query = "SELECT title.title_name, category, year.year, author.author from title, category, year, author where title.title_id = year.title_id and title.author_id and author.author_id = title.author_id and category.category = \"". $category." \" and category.category_id = title.category_id;";
         $dbase = connecttodb();
         $booksofcategory = mysqli_query($dbase, $query);
-        $list_of_book_category = $booksofcategory->fetch_all();
-        
-        if (strcasecmp($_GET["format"], "json")==0) {
-			$list_of_books = array();
-			foreach ($list_of_book_category as $book) {
-				array_push($list_of_books,array($book[author],$book[category],$book[year],$book[title_name]));
-			}
-			echo json_encode($list_of_books);
-		} else {
-            $xml = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><books></books>");
-			foreach ($list_of_book_category as $book) {
-				$bookXML = $xml->addChild("book");
-				$bookXML->addChild("author", $book[author]);
-				$bookXML->addChild("name", $book[category]);
-				$bookXML->addChild("year", $book[year]);
-				$bookXML->addChild("title", $book[title_name]);
-			}
+        $xml = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><books></books>");
+        $response = array();
+        while ($book = $booksofcategory->fetch_assoc()) {
+            $currBook = $xml->addChild("book");
+            $currBook->addChild("author", $book[author]);
+            $currBook->addChild("name", $book[category]);
+            $currBook->addChild("year", $book[year]);
+            $currBook->addChild("title", $book[title_name]);
+		}
+        if (strcasecmp($_GET["format"], "json")!=0){
             header('Content-Type: application/xml; charset=utf-8');	
 		    echo $xml->asXML();
-		}
+        } else {
+			$list_of_books = array();
+			while ($book = $booksofcategory->fetch_assoc()) {
+				array_push($list_of_books,array($book[author],$book[category],$book[year],$book[title_name]));
+			}
+			array_push($response, $list_of_books);
+            echo json_encode($response);
+        }
     }
         
 }
