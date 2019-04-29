@@ -23,7 +23,7 @@ function querydbforBooksfromCategories($chosenCategory){
         $query = "SELECT title.title_name, category, year.year, author.author from title, category, year, author where title.title_id = year.title_id and title.author_id and author.author_id = title.author_id and category.category = \"". $category." \" and category.category_id = title.category_id;";
         $dbase = connecttodb();
         $booksofcategory = mysqli_query($dbase, $query);
-        $list_of_book_category = $booksofcategory->fetch_all(MYSQLI_ASSOC);
+        $list_of_book_category = $booksofcategory->fetch_all();
         
         if (strcasecmp($_GET["format"], "json")==0) {
 			$list_of_books = array();
@@ -40,7 +40,7 @@ function querydbforBooksfromCategories($chosenCategory){
 				$bookXML->addChild("year", $book[year]);
 				$bookXML->addChild("title", $book[title_name]);
 			}
-            Header('Content-type: text/xml');	
+            header('Content-Type: application/xml; charset=utf-8');	
 		    echo $xml->asXML();
 		}
     }

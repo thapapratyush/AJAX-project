@@ -17,9 +17,7 @@ function logError(msg){
 
 function getAllCategoriesfromdb(data){
     var list_of_categories = []
-    if(isJSON(data.responseText)){
-        list_of_categories = JSON.parse(data.responseText);
-    }else if(data.responseXML){
+    if(data.responseXML){
         list_of_categories = data.responseXML.firstChild.childNodes; //The responseXML returns a document of which categories is the first element. All it's child nodes are the list of categories
     }
     addCategoriestoUI(list_of_categories);
@@ -65,9 +63,44 @@ function getBooksfromCategory(selectedCategory){
                 format:parseURL(),
                 selectedCategory:selectedCategory.toString(),
             },
-            onSuccess:logError,
+            onSuccess:addBookstoUI,
 
         });
+}
+
+function addBookstoUI(d){
+    var returnXML = d.responseXML;
+    var books = returnXML.getElementsByTagName("books")[0];
+    var currBook = books.firstChild;
+    var list_of_books = [];
+    while (currBook) {
+        var bookAuthor = currBook.firstChild.firstChild.nodeValue;
+        var bookCat = currBook.firstChild.nextSibling.firstChild.nodeValue;
+        var bookYear = currBook.firstChild.nextSibling.
+            nextSibling.firstChild.nodeValue;
+        var bookName = currBook.lastChild.firstChild.nodeValue;
+        list_of_books.push([bookAuthor, bookCat, bookYear, bookName]);
+        currBook = currBook.nextSibling;
+    }
+    if (list_of_books) {
+        var title = document.createElement("div");
+        var text = document.createTextNode(list_of_books[0][1] + '":');
+        title.appendChild(text);
+        $("books").appendChild(title);
+    }
+    var listbooks = document.createElement("ul");
+
+    for (var i=0; i < list_of_books.length; i++) {
+        var li = document.createElement("li");
+        var bookItem = list_of_books[i][3] + 
+            ", by " + list_of_books[i][0] + 
+            " (" + list_of_books[i][2] + ")";
+        var row = document.createTextNode(bookItem);
+        li.appendChild(row);
+        listbooks.appendChild(li);
+    }
+
+    $("books").appendChild(listbooks);
 }
 
 function parseURL(){
